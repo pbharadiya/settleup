@@ -56,8 +56,10 @@
 <div>
   <h3>Stats</h3>
   <div>
-    <p>Your total Credit: <strong>Rs. <%= @group.credit_for(current_user) || 0 %></strong></p>
-    <p>Your total Debt: <strong>Rs. <%= @group.debt_for(current_user) || 0 %></strong></p>
+    <p>Your total Paid: <strong>Rs. <%= @group.total_paid_by(current_user) || 0 %></strong></p>
+    <p>Your total Spent: <strong>Rs. <%= @group.total_spent_by(current_user) || 0 %></strong></p>
+    <% h = summary_for(@group) %>
+    <p>Your total <%= h[:result].keys.first.to_s.titleize %>: <strong>Rs. <%= h[:result].values.first || 0 %></strong></p>
   <div>
 </div>
 

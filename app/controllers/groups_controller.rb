@@ -37,7 +37,8 @@ class GroupsController < ApplicationController
   def update
     if @group.update(group_params)
       @group.member_ids = params[:group][:member].map(&:to_i)
-      redirect_to @group, notice: 'Group was successfully updated.'
+      return_path = @group.member_ids.include?(current_user.id) ? @group : groups_path
+      redirect_to return_path, notice: 'Group was successfully updated.'
     else
       render :edit
     end

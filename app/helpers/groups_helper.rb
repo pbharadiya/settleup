@@ -22,4 +22,17 @@ module GroupsHelper
     end
     debt
   end
+
+  def summary_for(group, user=current_user)
+    summary = {}
+    paid = group.total_paid_by(user).to_i
+    spent = group.total_spent_by(user).to_i
+
+    if paid > spent
+      summary[:result] = { credit: (paid-spent) }
+    else
+      summary[:result] = { debt: (spent-paid) }
+    end
+    summary
+  end
 end

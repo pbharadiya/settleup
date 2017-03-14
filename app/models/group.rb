@@ -6,10 +6,12 @@ class Group < ApplicationRecord
 
   validates :name, presence: true
 
+  # deprecated
   def debt_for(user)
     transactions.where("payee_id = ? and payer_id != ?", user.id,user.id).pluck(:amount).reduce(:+)
   end
 
+  # deprecated
   def credit_for(user)
     transactions.where(payee_id: user.id, payer_id: user.id).pluck(:amount).reduce(:+)
   end
@@ -20,5 +22,13 @@ class Group < ApplicationRecord
 
   def credit_to(myself, other)
     credit_to_other = transactions.where(payer_id: myself.id, payee_id:  other.id).pluck(:amount).reduce(:+)
+  end
+
+  def total_paid_by(user)
+    transactions.where(payer_id: user.id).pluck(:amount).reduce(:+)
+  end
+
+  def total_spent_by(user)
+    transactions.where(payee_id: user.id).pluck(:amount).reduce(:+)
   end
 end
