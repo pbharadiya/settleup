@@ -12,7 +12,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'font-awesome-sass', '~> 4.7.0'
 gem 'devise' #user authentication
 
-gem 'pry', group: :production
+gem 'pg', group: :production
 
 group :development, :test do
   gem 'mysql2', '>= 0.3.18', '< 0.5'
