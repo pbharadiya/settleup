@@ -1,0 +1,82 @@
+<%= form_for([:group, payment]) do |f| %>
+  <% if payment.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+
+      <ul>
+      <% payment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group row">
+    <div class="form-group col-sm-3">
+      <%= f.label :amount, "How much?" %>
+      <%= f.number_field :amount, autofocus: true, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="form-group col-sm-6">
+      <%= f.label :purpose, "Purpose" %>
+      <%= f.text_field :purpose, autofocus: false, class: "form-control" %>
+    </div>
+  </div>
+
+  <%= f.fields_for :transactions do |ff| %>
+    <div class="form-group">
+      <%= ff.label :payer_id, "Who paid?" %>
+      &nbsp;&nbsp;<%= ff.collection_select :payer_id, @group.members, :id, :name, {}, {class: 'chosen-select payer_id', data: { placeholder: 'Add payer...' }} %>
+    </div>
+
+    <div class="form-group row mb0">
+      <div class="form-group col-sm-3">
+        <%= ff.label :payee_id, "For whom?" %>
+        <%= ff.collection_select :payee_id, @group.members, :id, :name, {include_blank: false }, { class: 'chosen-select' } %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= link_to_add_fields 'Add new member', f, :transactions %>
+  </div>
+
+  <div class="actions form-group">
+    <%= f.submit nil, class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $('[data-form-prepend]').click( function(e) {
+    var obj = $( $(this).attr('data-form-prepend') );
+    obj.insertBefore( this );
+    updatePayer();
+    updatePayeeInput();
+    $('.chosen-select').chosen();
+
+    return false;
+  });
+
+  $('#payment_transactions_attributes_0_payer_id').change(function(){
+    updatePayer();
+  })
+
+  var updatePayer = function (){
+    $('.payer_id').each(function(){
+      // assuming the first element as default
+      var payer_id = $('#payment_transactions_attributes_0_payer_id').val();
+      $(this).val(payer_id);
+    })
+  }
+
+  var updatePayeeInput = function(){
+    $('.payee-select,.payer_id').each(function(){
+
+      $(this).attr('name', function(){
+        return $(this).attr('name').replace( 'new_record', (new Date()).getTime() );
+      })
+    })
+  }
+</script>

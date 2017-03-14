@@ -1,0 +1,65 @@
+<div>
+  <h2>Group name: <%= @group.name %></h2>
+  <h3>Group members:</h3>
+  <ol>
+    <% @group.members.each do |member| %>
+      <li><%= member.name + ' <' + member.email + '>' %></li>
+    <% end %>
+  </ol>
+  <%= link_to "Add payment", new_group_payment_path(@group), class: 'btn btn-primary' %><br>
+</div>
+
+<div>
+  <h3>Payment histroy</h3>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Purpose</th>
+          <th>Amount</th>
+          <th>Who paid?</th>
+          <th>For whom?</th>
+          <th>When?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @group.payments.each.with_index(1) do |payment,i| %>
+          <tr>
+            <td><%= i %></td>
+            <td><%= payment.purpose %></td>
+            <td><%= payment.amount %></td>
+            <td><%= payment.payer ? payment.payer.name : "-" %></td>
+            <td><%= payment.payees.collect(&:name).join(', ') %></td>
+            <td><%= display_date(payment.created_at) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div>
+  <h3>Debts</h3>
+  <div>
+    <% h = debt_summary_for(@group) %>
+    <% if h.any? %>
+      <% h.each do |e| %>
+        <span><%= e[:payer] %> </span><strong>&rarr;</strong><span><%= e[:payee] %></span><span style="margin-left: 40px;">Rs. <%= e[:amount] %></span><br>
+      <% end %>
+    <% else %>
+      <p><i>Well done! Nobody has any debt so far.</i></p>
+    <% end %>
+  </div>
+</div>
+
+<div>
+  <h3>Stats</h3>
+  <div>
+    <p>Your total Credit: <strong>Rs. <%= @group.credit_for(current_user) || 0 %></strong></p>
+    <p>Your total Debt: <strong>Rs. <%= @group.debt_for(current_user) || 0 %></strong></p>
+  <div>
+</div>
+
+<%= link_to 'Edit Group', edit_group_path(@group) %> |
+<%= link_to "&laquo; Back".html_safe, groups_path %>

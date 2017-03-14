@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Settleup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body class="<%= 'login' if (controller_name == 'sessions' && action_name == 'new') %>">
+    <%= render partial: "shared/header" %>
+    <% flash.each do |name,msg| %>
+      <% if msg %>
+        <div class="alert-error">
+          <%= content_tag(:div, msg, :id => "flash_#{name}")%>
+        </div>
+      <% end %>
+    <% end %>
+    <% if request.path == root_path %>
+      <%= yield %>
+    <% else %>
+      <section>
+        <div class="container">
+          <%= yield %>
+        </div>
+      </section>
+    <% end %>
+  </body>
+</html>

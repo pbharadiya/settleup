@@ -1,0 +1,27 @@
+<%= form_for(group) do |f| %>
+  <% if group.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h3><%= pluralize(group.errors.count, "error") %> prohibited this group from being saved:</h3>
+
+      <ul>
+      <% group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :group_member, "Add members" %>
+    <%= select_tag 'group[member][]', options_for_select(members_collection_select, group.member_ids), id: 'group_member', class: 'chosen-select', multiple: true, data: { placeholder: 'Add members...' } %>
+  </div>
+
+  <div class="actions form-group">
+    <%= f.submit nil, class: "btn btn-primary" %>
+  </div>
+<% end %>

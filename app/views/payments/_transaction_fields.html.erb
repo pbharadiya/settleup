@@ -1,0 +1,4 @@
+<div class="form-group">
+  <%= f.hidden_field :payer_id, class: "payer_id" %>
+  <%= f.collection_select :payee_id, @group.members, :id, :name, {include_blank: false }, { class: 'chosen-select payee-select' } %>
+</div>
