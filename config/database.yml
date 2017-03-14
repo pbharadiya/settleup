@@ -16,6 +16,7 @@ test:
 
 production:
   <<: *default
+  adapter: postgresql
   database: settleup_production
   username: settleup
   password: <%= ENV['SETTLEUP_DATABASE_PASSWORD'] %>
