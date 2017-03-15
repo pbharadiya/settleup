@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <%= f.fields_for :transactions do |ff| %>
+  <%= f.fields_for :transactions, Transaction.new do |ff| %>
     <div class="form-group">
       <%= ff.label :payer_id, "Who paid?" %>
       &nbsp;&nbsp;<%= ff.collection_select :payer_id, @group.members, :id, :name, {}, {class: 'chosen-select payer_id', data: { placeholder: 'Add payer...' }} %>
@@ -72,10 +72,11 @@
   }
 
   var updatePayeeInput = function(){
+    var current_time = (new Date()).getTime();
     $('.payee-select,.payer_id').each(function(){
 
       $(this).attr('name', function(){
-        return $(this).attr('name').replace( 'new_record', (new Date()).getTime() );
+        return $(this).attr('name').replace('new_record', current_time);
       })
     })
   }

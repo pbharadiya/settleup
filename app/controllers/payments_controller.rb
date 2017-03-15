@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_group, only: [:new, :create]
+  before_action :set_group, only: [:new, :create, :show, :edit, :destroy]
   before_action :set_payment, only: [:show, :edit, :update, :destroy]
 
   # GET /payments
@@ -53,7 +53,7 @@ class PaymentsController < ApplicationController
   private
 
     def set_payment
-      @payment = payment.find(params[:id])
+      @payment = @group.payments.find(params[:id])
     end
 
     def set_group
